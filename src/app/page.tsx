@@ -138,7 +138,7 @@ export default function Home() {
 
             <SliderField label="Stress" value={stress} onChange={setStress} />
 
-            <SliderField label="Healthy Eating" value={eating} onChange={setEating} />
+            <SliderField label="Nutrition" value={Nutrition} onChange={setNutrition} />
 
  
 
