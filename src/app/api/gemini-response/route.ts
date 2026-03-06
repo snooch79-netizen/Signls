@@ -11,20 +11,26 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const body = (await request.json()) as {
-      wellnessData?: unknown;
-    };
+    const body = await request.json();
+    const wellnessData = body.wellnessData || {};
+    
+    const { sleep, energy, mood, stress, nutrition, symptoms } = wellnessData;
 
-    const dataForPrompt =
-      typeof body.wellnessData === "object" && body.wellnessData !== null
-        ? JSON.stringify(body.wellnessData)
-        : "No structured data provided.";
+    const prompt = `The user just logged their wellness data:
+- Sleep: ${sleep}/10
+- Energy: ${energy}/10
+- Mood: ${mood}/10
+- Stress: ${stress}/10
+- Nutrition: ${nutrition}/10
+- Symptoms: ${symptoms}
 
-    const prompt = `
-The user just logged their wellness data: ${dataForPrompt}.
+Based on this specific data, give a warm, personalized 2-3 sentence response that:
+1. Acknowledges their specific situation (reference their sleep, mood, stress levels, or symptoms by name)
+2. If they're doing well (most scores 7+), celebrate that and suggest maintaining it
+3. If they're struggling (any score under 5), offer one specific, actionable suggestion based on what they reported
+4. Be conversational and human, not clinical
 
-Give a warm, friendly, insightful 2–3 sentence response that acknowledges their entry and suggests one small thing to pay attention to. Be conversational, not clinical. Never give medical advice.
-    `.trim();
+Never give medical advice. Be specific to their data, not generic.`;
 
     const response = await fetch(
       "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent?key=" +
@@ -75,4 +81,3 @@ Give a warm, friendly, insightful 2–3 sentence response that acknowledges thei
     );
   }
 }
-
