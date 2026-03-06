@@ -32,6 +32,8 @@ Based on this specific data, give a warm, personalized 2-3 sentence response tha
 
 Never give medical advice. Be specific to their data, not generic.`;
 
+    console.log("Sending prompt to Gemini:", prompt);
+
     const response = await fetch(
       "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent?key=" +
         apiKey,
@@ -50,7 +52,10 @@ Never give medical advice. Be specific to their data, not generic.`;
       }
     );
 
+    console.log("Gemini response status:", response.status);
+
     if (!response.ok) {
+      console.log("API error, returning fallback");
       return NextResponse.json(
         {
           message:
@@ -66,12 +71,17 @@ Never give medical advice. Be specific to their data, not generic.`;
       }>;
     };
 
+    console.log("Gemini JSON response:", json);
+
     const message =
       json.candidates?.[0]?.content?.parts?.[0]?.text ??
       "Thanks for checking in today. Keep noticing how your body and energy shift through the day.";
 
+    console.log("Final message:", message);
+
     return NextResponse.json({ message });
-  } catch {
+  } catch (error) {
+    console.log("Error caught:", error);
     return NextResponse.json(
       {
         message:
