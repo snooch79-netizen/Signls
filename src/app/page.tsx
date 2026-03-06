@@ -49,6 +49,8 @@ export default function Home() {
       const data = await response.json();
 
       setAiResponse(data.response);
+     console.log('AI Response:', data.response);
+     alert('Response received: ' + data.response);
 
       setEntries(prev => [{
 
