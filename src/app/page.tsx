@@ -16,7 +16,7 @@ export default function Home() {
 
   const [stress, setStress] = useState(5);
 
-  const [eating, setEating] = useState(6);
+  const [nutrition, setNutrition] = useState(6);
 
   const [symptoms, setSymptoms] = useState('');
 
@@ -42,7 +42,7 @@ export default function Home() {
 
         headers: { 'Content-Type': 'application/json' },
 
-        body: JSON.stringify({ sleep, energy, mood, stress, eating, symptoms }),
+        body: JSON.stringify({ sleep, energy, mood, stress, nutrition, symptoms }),
 
       });
 
@@ -54,7 +54,7 @@ export default function Home() {
 
         date: new Date().toLocaleDateString(),
 
-        sleep, energy, mood, stress, eating, symptoms,
+        sleep, energy, mood, stress, nutrition, symptoms,
 
         aiResponse: data.response,
 
